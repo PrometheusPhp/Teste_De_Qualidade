@@ -1,6 +1,8 @@
 package Tasks;
 
+import Framework.Browser.Waits;
 import PageObjects.FinishPage;
+import PageObjects.LoginPage;
 import Validacao.FinishValidacao;
 import Validacao.GenericValidacao;
 import Validacao.LoginValidacao;
@@ -13,6 +15,8 @@ public class FinishTask {
     private GenericValidacao genericValidacao;
     private FinishValidacao finishValidacao;
     private LoginValidacao loginValidacao;
+    private Waits waits;
+    private LoginPage loginPage;
 
     public FinishTask (WebDriver driver){
 
@@ -21,6 +25,8 @@ public class FinishTask {
         genericValidacao = new GenericValidacao(this.driver);
         finishValidacao = new FinishValidacao(this.driver);
         loginValidacao = new LoginValidacao(this.driver);
+        waits = new Waits(this.driver);
+        loginPage = new LoginPage(this.driver);
     }
 
     public void finalizarCompra(){
@@ -28,7 +34,9 @@ public class FinishTask {
         genericValidacao.validationTitlePages("Checkout: Complete!");
         finishValidacao.validationSucessoCompra();
         finishPage.getMenuButton().click();
+        waits.loadElement(finishPage.getMenuLogoutLink());
         finishPage.getMenuLogoutLink().click();
+        waits.loadElement(loginPage.getLoginButton());
         loginValidacao.loginValidation();
     }
 }
